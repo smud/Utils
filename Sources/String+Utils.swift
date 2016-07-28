@@ -29,7 +29,7 @@ extension String {
     }
     #elseif os(OSX)
     public func forEachLine(handler: (line: String, stop: inout Bool)->()) {
-        return enumerateLines(handler)
+        return enumerateLines(invoking: handler)
     }
     #endif
 }

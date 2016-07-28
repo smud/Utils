@@ -24,10 +24,8 @@ extension Scanner {
 #elseif os(OSX)
     public func scanString(_ searchString: String) -> String? {
         var result: NSString?
-        guard scanString(string, into: &result) else {
-            return nul
-        }
-        return result
+        guard scanString(searchString, into: &result) else { return nil }
+        return result as? String
     }
 
 #endif
@@ -44,10 +42,8 @@ extension Scanner {
 #elseif os(OSX)
     public func scanCharacters(from: CharacterSet) -> String? {
         var result: NSString?
-        guard scanCharacters(from: from, into: &result) else {
-            return nil
-        }
-        return result
+        guard scanCharacters(from: from, into: &result) else { return nil }
+        return result as? String
     }
 #endif
 
@@ -58,10 +54,8 @@ extension Scanner {
 #elseif os(OSX)
     public func scanUpTo(_ string: String) -> String? {
         var result: NSString?
-        guard scanUpTo(string, into: &result) else {
-            return nil
-        }
-        return result
+        guard scanUpTo(string, into: &result) else { return nil }
+        return result as? String
     }
 #endif
 
@@ -72,12 +66,45 @@ extension Scanner {
 #elseif os(OSX)
     public func scanUpToCharacters(from set: CharacterSet) -> String? {
         var result: NSString?
-        guard scanUpToCharacters(from: set, into: &result) else {
-            return nil
-        }
-        return result
+        guard scanUpToCharacters(from: set, into: &result) else { return nil }
+        return result as? String
     }
 #endif
+
+    public var scanLocationInCharacters: Int {
+        let utf16 = string.utf16
+        guard let to16 = utf16.index(utf16.startIndex, offsetBy: scanLocation, limitedBy: utf16.endIndex),
+            let to = String.Index(to16, within: string) else {
+                return 0
+        }
+        return string.distance(from: string.startIndex, to: to)
+    }
+    
+    public var parsedText: String {
+        let utf16 = string.utf16
+        guard let to16 = utf16.index(utf16.startIndex, offsetBy: scanLocation, limitedBy: utf16.endIndex),
+            let to = String.Index(to16, within: string) else {
+                return ""
+        }
+        // strIndex is a String.CharacterView.Index
+        return string.substring(to: to)
+    }
+    
+    public var line: Int {
+        var lineCount = 1
+        for character in parsedText.characters {
+            if character == "\n" { lineCount += 1 }
+        }
+        return lineCount
+    }
+    
+    public var column: Int {
+        let text = parsedText
+        if let range = text.range(of: "\n", options: .backwards) {
+            return text.distance(from: range.upperBound, to: text.endIndex) + 1
+        }
+        return parsedText.characters.count + 1
+    }
 }
 
 
