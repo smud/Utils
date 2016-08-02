@@ -13,7 +13,6 @@
 import Foundation
 
 extension String {
-    #if os(Linux)
     public func forEachLine(handler: (line: String, stop: inout Bool)->()) {
         let lines = components(separatedBy: "\n")
         var stop = false
@@ -27,10 +26,5 @@ extension String {
             }
         }
     }
-    #elseif os(OSX)
-    public func forEachLine(handler: (line: String, stop: inout Bool)->()) {
-        return enumerateLines(invoking: handler)
-    }
-    #endif
 }
 
