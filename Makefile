@@ -17,7 +17,6 @@ distclean:
 
 fetch-master:
 	swift package fetch
-	(cd Packages/Utils-*; git checkout master; git pull)
 
 tags:
 	ctags -R ./ ../swift-corelibs-foundation/
