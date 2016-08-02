@@ -63,35 +63,35 @@ class UtilsTests: XCTestCase {
         printLines("text6_4", text6_4)
         printLines("text6_5", text6_5)
 
-        equalToLines(text1_1, [])
+        equalToLines(text1_1, [""])
         equalToLines(text1_2, [""])
-        equalToLines(text1_3, [""])
-        equalToLines(text1_4, [""])
+        equalToLines(text1_3, ["", ""])
+        equalToLines(text1_4, ["", ""])
         
         equalToLines(text2_1, ["a"])
         equalToLines(text2_2, ["a"])
-        equalToLines(text2_3, ["a"])
-        equalToLines(text2_4, ["a"])
+        equalToLines(text2_3, ["a", ""])
+        equalToLines(text2_4, ["a", ""])
         
-        equalToLines(text3_1, ["a", "b"])
+        equalToLines(text3_1, ["a\rb"])
         equalToLines(text3_2, ["a", "b"])
         equalToLines(text3_3, ["a", "b"])
         
         equalToLines(text4_1, ["a", "b"])
-        equalToLines(text4_2, ["a", "b"])
-        equalToLines(text4_3, ["a", "b"])
+        equalToLines(text4_2, ["a", "b", ""])
+        equalToLines(text4_3, ["a", "b", ""])
         
-        equalToLines(text5_1, ["a", "", "b"])
+        equalToLines(text5_1, ["a\r\rb"])
         equalToLines(text5_2, ["a", "", "b"])
         equalToLines(text5_3, ["a", "", "b"])
-        equalToLines(text5_4, ["a", "", "b"])
+        equalToLines(text5_4, ["a\r", "b"])
         equalToLines(text5_5, ["a", "", "b"])
         
-        equalToLines(text6_1, ["", ""])
-        equalToLines(text6_2, ["", ""])
-        equalToLines(text6_3, ["", ""])
-        equalToLines(text6_4, ["", ""])
-        equalToLines(text6_5, ["", ""])
+        equalToLines(text6_1, ["\r"])
+        equalToLines(text6_2, ["", "", ""])
+        equalToLines(text6_3, ["", "", ""])
+        equalToLines(text6_4, ["\r", ""])
+        equalToLines(text6_5, ["", "", ""])
     }
 
     func printLines(_ name: String, _ text: String) {
@@ -106,9 +106,13 @@ class UtilsTests: XCTestCase {
     func equalToLines(_ text: String, _ lines: [String]) {
         var i = 0
         text.forEachLine { line, stop in
-            XCTAssertEqual(line, lines[i])
+            XCTAssertTrue(i < lines.count)
+            if i < lines.count {
+                XCTAssertEqual(line, lines[i])
+            }
             i += 1
         }
+        XCTAssertTrue(i == lines.count)
     }
 
     static var allTests : [(String, (UtilsTests) -> () throws -> Void)] {
