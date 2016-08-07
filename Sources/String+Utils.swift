@@ -13,14 +13,14 @@
 import Foundation
 
 extension String {
-    public func forEachLine(handler: (line: String, stop: inout Bool)->()) {
+    public func forEachLine(handler: (_ line: String, _ stop: inout Bool)->()) {
         let lines = components(separatedBy: "\n")
         var stop = false
         for var line in lines {
             if line.hasSuffix("\r") {
                 line = line.substring(to: line.index(before: line.endIndex))
             }
-            handler(line: line, stop: &stop)
+            handler(line, &stop)
             if stop {
                 return
             }
