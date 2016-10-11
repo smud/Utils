@@ -104,6 +104,28 @@ extension Scanner {
         return string.substring(from: index)
     }
     
+    public var lineBeingParsed: String {
+        let targetLine = self.line
+        var currentLine = 1
+        var line = ""
+        line.reserveCapacity(256)
+        for character in parsedText.characters {
+            if currentLine > targetLine {
+                break
+            }
+            
+            if character == "\n" {
+                currentLine += 1
+                continue
+            }
+            
+            if currentLine == targetLine {
+                line.append(character)
+            }
+        }
+        return line
+    }
+    
     public var line: Int {
         var lineCount = 1
         for character in parsedText.characters {
