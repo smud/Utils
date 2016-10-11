@@ -58,6 +58,10 @@ extension Scanner {
         return result as? String
     }
 #endif
+    
+    public func skipUpTo(_ string: String) -> Bool {
+        return scanUpTo(string) != nil
+    }
 
 #if os(Linux)
     public func scanUpToCharacters(from set: CharacterSet) -> String? {
@@ -80,14 +84,24 @@ extension Scanner {
         return string.distance(from: string.startIndex, to: to)
     }
     
-    public var parsedText: String {
+    private var currentCharacterIndex: String.CharacterView.Index? {
         let utf16 = string.utf16
         guard let to16 = utf16.index(utf16.startIndex, offsetBy: scanLocation, limitedBy: utf16.endIndex),
             let to = String.Index(to16, within: string) else {
-                return ""
+                return nil
         }
-        // strIndex is a String.CharacterView.Index
-        return string.substring(to: to)
+        // to is a String.CharacterView.Index
+        return to
+    }
+    
+    public var parsedText: String {
+        guard let index = currentCharacterIndex else { return "" }
+        return string.substring(to: index)
+    }
+
+    public var textToParse: String {
+        guard let index = currentCharacterIndex else { return "" }
+        return string.substring(from: index)
     }
     
     public var line: Int {
