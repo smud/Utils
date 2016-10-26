@@ -14,12 +14,10 @@ import Foundation
 
 extension String {
     public func forEachLine(handler: (_ line: String, _ stop: inout Bool)->()) {
-        let lines = components(separatedBy: "\n")
+        let lines = replacingOccurrences(of: "\r\n", with: "\n")
+            .components(separatedBy: "\n")
         var stop = false
-        for var line in lines {
-            if line.hasSuffix("\r") {
-                line = line.substring(to: line.index(before: line.endIndex))
-            }
+        for line in lines {
             handler(line, &stop)
             if stop {
                 return

@@ -74,6 +74,10 @@ extension Scanner {
         return result as? String
     }
 #endif
+    
+    public func skipUpToCharacters(from set: CharacterSet) -> Bool {
+        return scanUpToCharacters(from: set) != nil
+    }
 
     public var scanLocationInCharacters: Int {
         let utf16 = string.utf16
@@ -109,12 +113,12 @@ extension Scanner {
         var currentLine = 1
         var line = ""
         line.reserveCapacity(256)
-        for character in parsedText.characters {
+        for character in string.characters {
             if currentLine > targetLine {
                 break
             }
             
-            if character == "\n" {
+            if character == "\n" || character == "\r\n" {
                 currentLine += 1
                 continue
             }
@@ -127,10 +131,7 @@ extension Scanner {
     }
     
     public var line: Int {
-        var lineCount = 1
-        for character in parsedText.characters {
-            if character == "\n" { lineCount += 1 }
-        }
+        let lineCount = 1 + parsedText.characters.filter { $0 == "\n" || $0 == "\r\n" }.count
         return lineCount
     }
     
