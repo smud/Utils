@@ -109,7 +109,7 @@ extension Scanner {
     }
     
     public var lineBeingParsed: String {
-        let targetLine = self.line
+        let targetLine = self.line()
         var currentLine = 1
         var line = ""
         line.reserveCapacity(256)
@@ -129,13 +129,15 @@ extension Scanner {
         }
         return line
     }
-    
-    public var line: Int {
+
+    // Very slow, do not in use in loops
+    public func line() -> Int {
         let lineCount = 1 + parsedText.characters.filter { $0 == "\n" || $0 == "\r\n" }.count
         return lineCount
     }
     
-    public var column: Int {
+    // Very slow, do not in use in loops
+    public func column() -> Int {
         let text = parsedText
         if let range = text.range(of: "\n", options: .backwards) {
             return text.distance(from: range.upperBound, to: text.endIndex) + 1
