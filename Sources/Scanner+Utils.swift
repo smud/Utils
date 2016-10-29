@@ -13,7 +13,7 @@
 import Foundation
 
 extension Scanner {
-    #if os(Linux)
+    #if os(Linux) || os(Windows)
     public var isAtEnd: Bool { return atEnd }
     #endif
     
@@ -146,7 +146,7 @@ extension Scanner {
         return scanHexDouble() != nil
     }
 
-    #if os(Linux)
+    #if os(Linux) || os(Windows)
     public func scanString(_ searchString: String) -> String? {
         return scanString(string: searchString)
     }
@@ -163,7 +163,7 @@ extension Scanner {
         return scanString(string) != nil
     }
 
-    #if os(Linux)
+    #if os(Linux) || os(Windows)
     public func scanCharacters(from set: CharacterSet) -> String? {
         return scanCharactersFromSet(set)
     }
@@ -180,7 +180,7 @@ extension Scanner {
         return scanCharacters(from: from) != nil
     }
 
-    #if os(Linux)
+    #if os(Linux) || os(Windows)
     public func scanUpTo(_ string: String) -> String? {
         return scanUpToString(string)
     }
@@ -196,7 +196,7 @@ extension Scanner {
         return scanUpTo(string) != nil
     }
 
-    #if os(Linux)
+    #if os(Linux) || os(Windows)
     public func scanUpToCharacters(from set: CharacterSet) -> String? {
         return scanUpToCharactersFromSet(set)
     }
