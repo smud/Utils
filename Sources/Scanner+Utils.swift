@@ -13,67 +13,200 @@
 import Foundation
 
 extension Scanner {
-#if os(Linux)
+    #if os(Linux)
     public var isAtEnd: Bool { return atEnd }
-#endif
+    #endif
+    
+    #if os(OSX)
+    public func scanInteger() -> Int? {
+        var result: Int = 0
+        return scanInt(&result) ? result : nil
+    }
+    #endif
+    
+    @discardableResult
+    public func skipInteger() -> Bool {
+        return scanInteger() != nil
+    }
 
-#if os(Linux)
+    #if os(OSX)
+    public func scanInt32() -> Int32? {
+        var result: Int32 = 0
+        return scanInt32(&result) ? result : nil
+    }
+    #endif
+    
+    @discardableResult
+    public func skipInt32() -> Bool {
+        #if os(OSX)
+            return scanInt32(nil)
+        #else
+            return scanInt() != nil
+        #endif
+    }
+
+    #if os(OSX)
+    public func scanInt64() -> Int64? {
+        var result: Int64 = 0
+        return scanInt64(&result) ? result : nil
+    }
+    #else
+    public func scanInt64() -> Int64? {
+        var result: Int64 = 0
+        return scanLongLong(&result) ? result : nil
+    }
+    #endif
+    
+    @discardableResult
+    public func skipInt64() -> Bool {
+        return scanInt64() != nil
+    }
+    
+    public func scanUInt64() -> UInt64? {
+        var result: UInt64 = 0
+        return scanUnsignedLongLong(&result) ? result : nil
+    }
+    
+    @discardableResult
+    public func skipUInt64() -> Bool {
+        return scanUInt64() != nil
+    }
+    
+    func scanFloat() -> Float? {
+        var result: Float = 0.0
+        return scanFloat(&result) ? result : nil
+    }
+    
+    @discardableResult
+    public func skipFloat() -> Bool {
+        return scanFloat() != nil
+    }
+    
+    public func scanDouble() -> Double? {
+        var result: Double = 0.0
+        return scanDouble(&result) ? result : nil
+    }
+    
+    @discardableResult
+    public func skipDouble() -> Bool {
+        return scanDouble() != nil
+    }
+    
+    #if os(OSX)
+    public func scanHexUInt32() -> UInt32? {
+        var result: UInt32 = 0
+        return scanHexInt32(&result) ? result : nil
+    }
+    #else
+    public func scanHexUInt32() -> UInt32? {
+        var result: UInt32 = 0
+        return scanHexInt(&result) ? result : nil
+    }
+    #endif
+    
+    @discardableResult
+    public func skipHexUInt32() -> Bool {
+        return scanHexUInt32() != nil
+    }
+    
+    #if os(OSX)
+    public func scanHexUInt64() -> UInt64? {
+        var result: UInt64 = 0
+        return scanHexInt64(&result) ? result : nil
+    }
+    #else
+    public func scanHexUInt64() -> UInt64? {
+        var result: UInt64 = 0
+        return scanHexLongLong(&result) ? result : nil
+    }
+    #endif
+    
+    @discardableResult
+    public func skipHexUInt64() -> Bool {
+        return scanHexUInt64() != nil
+    }
+    
+    public func scanHexFloat() -> Float? {
+        var result: Float = 0.0
+        return scanHexFloat(&result) ? result : nil
+    }
+    
+    @discardableResult
+    public func skipHexFloat() -> Bool {
+        return scanHexFloat() != nil
+    }
+    
+    public func scanHexDouble() -> Double? {
+        var result: Double = 0.0
+        return scanHexDouble(&result) ? result : nil
+    }
+    
+    @discardableResult
+    public func skipHexDouble() -> Bool {
+        return scanHexDouble() != nil
+    }
+
+    #if os(Linux)
     public func scanString(_ searchString: String) -> String? {
         return scanString(string: searchString)
     }
-#elseif os(OSX)
+    #elseif os(OSX)
     public func scanString(_ searchString: String) -> String? {
         var result: NSString?
         guard scanString(searchString, into: &result) else { return nil }
         return result as? String
     }
-
-#endif
+    #endif
 
     @discardableResult
     public func skipString(_ string: String) -> Bool {
         return scanString(string) != nil
     }
 
-#if os(Linux)
+    #if os(Linux)
     public func scanCharacters(from set: CharacterSet) -> String? {
         return scanCharactersFromSet(set)
     }
-#elseif os(OSX)
+    #elseif os(OSX)
     public func scanCharacters(from: CharacterSet) -> String? {
         var result: NSString?
         guard scanCharacters(from: from, into: &result) else { return nil }
         return result as? String
     }
-#endif
+    #endif
 
-#if os(Linux)
+    @discardableResult
+    func skipCharacters(from: CharacterSet) -> Bool {
+        return scanCharacters(from: from) != nil
+    }
+
+    #if os(Linux)
     public func scanUpTo(_ string: String) -> String? {
         return scanUpToString(string)
     }
-#elseif os(OSX)
+    #elseif os(OSX)
     public func scanUpTo(_ string: String) -> String? {
         var result: NSString?
         guard scanUpTo(string, into: &result) else { return nil }
         return result as? String
     }
-#endif
+    #endif
     
     public func skipUpTo(_ string: String) -> Bool {
         return scanUpTo(string) != nil
     }
 
-#if os(Linux)
+    #if os(Linux)
     public func scanUpToCharacters(from set: CharacterSet) -> String? {
         return scanUpToCharactersFromSet(set)
     }
-#elseif os(OSX)
+    #elseif os(OSX)
     public func scanUpToCharacters(from set: CharacterSet) -> String? {
         var result: NSString?
         guard scanUpToCharacters(from: set, into: &result) else { return nil }
         return result as? String
     }
-#endif
+    #endif
     
     public func skipUpToCharacters(from set: CharacterSet) -> Bool {
         return scanUpToCharacters(from: set) != nil
