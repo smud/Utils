@@ -1,5 +1,5 @@
 import XCTest
-@testable import UtilsTestSuite
+@testable import UtilsTests
 
 XCTMain([
      testCase(UtilsTests.allTests),
