@@ -13,12 +13,12 @@
 import Foundation
 
 extension String {
-    public func forEachLine(handler: (_ line: String, _ stop: inout Bool)->()) {
+    public func forEachLine(handler: (_ line: String, _ stop: inout Bool) throws ->()) {
         let lines = replacingOccurrences(of: "\r\n", with: "\n")
             .components(separatedBy: "\n")
         var stop = false
         for line in lines {
-            handler(line, &stop)
+            try handler(line, &stop)
             if stop {
                 return
             }
